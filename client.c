@@ -6,7 +6,7 @@
 /*   By: diramire <diramire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:52:24 by diana             #+#    #+#             */
-/*   Updated: 2025/02/18 10:16:12 by diramire         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:58:30 by diramire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,59 +16,6 @@
 #include <stdio.h>
 #include <signal.h>
 
-void received_messaged(int sig)
-{
-	if (sig)
-		write(1, "message received by server!", 27);
-	
-}
-void	str_to_bin(char *str, int pid)
-{
-	int		i;
-	char	c;
-
-	while (*str)
-	{
-		i = 8;
-		c = *str++;
-		while (i--)
-		{
-			if (c >> i & 1)
-				kill(pid, SIGUSR2);
-			else
-				kill(pid, SIGUSR1);
-			usleep(1000);
-		}
-	}
-	i = 8;
-	while (i--)
-	{
-		kill(pid, SIGUSR1);
-		usleep(100);
-	}
-}
-
-int	main(int argc, char **argv)
-{
-	//struct sigaction	s_action;
-	int					server_pid;
-
-	//ft_memset(&s_action, 0, sizeof(s_action));
-	//s_action.sa_sigaction = received_messaged;
-	signal(SIGUSR1, received_messaged);
-
-	if (argc != 3)
-	{
-		write(1, "invalid args", 12);
-		return (0);
-	}
-	server_pid = atoi(argv[1]);
-	str_to_bin(argv[2], server_pid);
-	return (0);
-}
-
-
-/*
 void	send_signals(int pid, char *message)
 {
 	int				character;
@@ -121,4 +68,3 @@ int	main(int argc, char **argv)
 		ft_printf("ERROR. Follow this order: ./client <PID> <MESSAGE>\n");
 	return (0);
 }
-*/

@@ -6,7 +6,7 @@
 /*   By: diramire <diramire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:52:28 by diana             #+#    #+#             */
-/*   Updated: 2025/02/18 10:39:35 by diramire         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:04:17 by diramire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	main(int argc, char **argv)
 		ft_printf("Error. Just pust ./server, nothing else\n");
 		exit (0);
 	}
-	
 	else
 	{
 		ft_memset(&signal_received, 0, sizeof(signal_received));
