@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cosmos <cosmos@student.42.fr>              +#+  +:+       +#+        */
+/*   By: diramire <diramire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:52:28 by diana             #+#    #+#             */
-/*   Updated: 2025/02/17 09:31:23 by cosmos           ###   ########.fr       */
+/*   Updated: 2025/02/18 10:39:35 by diramire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,52 +16,6 @@
 #include <stdio.h>
 #include <signal.h>
 
-void	handle_signal(int sig, siginfo_t *info, void *context)
-{
-	static char	c;
-	static int	bit_pos;
-	pid_t		sender_pid;
-
-	(void)(context);
-	(void)(info);
-	sender_pid = info->si_pid;
-	c |= (sig == SIGUSR2) << (7 - bit_pos);
-	bit_pos++;
-	if (bit_pos == 8)
-	{
-		if (c == '\0')
-		{
-			write(1, "\n", 1);
-			kill(sender_pid, SIGUSR1);
-		}
-			
-		else
-			write(1, &c, 1);
-		c = 0;
-		bit_pos = 0;
-	}
-	
-}
-
-int	main(void)
-{
-	struct sigaction	s_action;
-
-	ft_memset(&s_action, 0, sizeof(s_action));
-	printf("server running with pid: %d\n", getpid());
-	printf("-----------------\n");
-	s_action.sa_sigaction = handle_signal;
-	s_action.sa_flags = SA_SIGINFO;
-	sigaction(SIGUSR1, &s_action, 0);
-	sigaction(SIGUSR2, &s_action, 0);
-	while (1)
-	{
-		pause();
-	}
-	return (0);
-}
-
-/*
 int	calculate_power(int nb, int power)
 {
 	int	res;
@@ -123,26 +77,27 @@ void	signal_handler(int signum)
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	struct sigaction	signal_received;
 
-	ft_memset(&signal_received, 0, sizeof(signal_received));
-	//pid_t pid = 0;
-	//ft_memset(&signal_received, 0, sizeof(struct sigaction));
-	//sigemptyset(&signal_received.sa_mask);
-	//pid = getpid();
-
-	ft_printf("Server's PID: %d\n", getpid());
-	signal_received.sa_sigaction = signal_handler;
-	signal_received.sa_flags = SA_SIGINFO;
-
-	//sigemptyset(&signal_received.sa_mask);
+	(void)argv;
+	if (argc != 1)
+	{
+		ft_printf("Error. Just pust ./server, nothing else\n");
+		exit (0);
+	}
 	
-	sigaction(SIGUSR1, &signal_received, 0);
-	sigaction(SIGUSR2, &signal_received, 0);
-	
+	else
+	{
+		ft_memset(&signal_received, 0, sizeof(signal_received));
+		sigemptyset(&signal_received.sa_mask);
+		ft_printf("Server's PID: %d\n", getpid());
+		signal_received.sa_handler = signal_handler;
+		signal_received.sa_flags = SA_SIGINFO;
+		sigaction(SIGUSR1, &signal_received, 0);
+		sigaction(SIGUSR2, &signal_received, 0);
+	}
 	while (1)
 		usleep(100);
 }
-*/
